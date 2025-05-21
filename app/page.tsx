@@ -206,6 +206,6 @@ export default function Home() {
           <p>© {new Date().getFullYear()} Quiz Islamique - Tous droits réservés</p>
         </footer>
       </div>
-    </div>
+    </div> 
   )
 }
