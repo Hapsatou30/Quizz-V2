@@ -83,11 +83,11 @@ export function Leaderboard() {
         userId: "ex2",
         userName: "Fatima",
         score: 90,
-        category: "Histoire",
+        category: "Sira",
         level: "Intermédiaire",
         date: Date.now() - 1000,
       },
-      { userId: "ex3", userName: "Omar", score: 85, category: "Pratiques", level: "Débutant", date: Date.now() - 2000 },
+      { userId: "ex3", userName: "Omar", score: 85, category: "Femmes", level: "Débutant", date: Date.now() - 2000 },
     ]
 
     // Ajouter uniquement les exemples nécessaires
