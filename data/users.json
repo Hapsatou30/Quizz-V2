@@ -1,28 +1,3 @@
 [
-  {
-    "id": "1747847797982",
-    "username": "koto",
-    "password": "motdepasse123",
-    "scores": [
-      {
-        "score": 100,
-        "category": "coran",
-        "level": "debutant",
-        "date": 1747847828910
-      }
-    ]
-  },
-  {
-    "id": "1747848820907",
-    "username": "poupée",
-    "password": "motdepasse123",
-    "scores": [
-      {
-        "score": 100,
-        "category": "fiqh",
-        "level": "debutant",
-        "date": 1747850101145
-      }
-    ]
-  }
+ supprime
 ]
