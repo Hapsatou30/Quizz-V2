@@ -15,33 +15,28 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { UserAvatar } from "@/components/user-avatar"
 import Link from "next/link"
 import confetti from "canvas-confetti"
-
+import { useAuth } from "@/hooks/use-auth"
 export default function QuizPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const categoryId = searchParams.get("category")
   const level = searchParams.get("level") as "debutant" | "intermediaire" | "avance" | null
-
+  const { user, isLoading } = useAuth()
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null)
   const [score, setScore] = useState(0)
   const [answers, setAnswers] = useState<string[]>([])
   const [timeLeft, setTimeLeft] = useState(30)
   const [isAnswered, setIsAnswered] = useState(false)
-  const [user, setUser] = useState<any>(null)
   const [mounted, setMounted] = useState(false)
   const [showConfetti, setShowConfetti] = useState(false)
 
   // Vérifier si l'utilisateur est connecté
   useEffect(() => {
-    if (mounted) {
-      const currentUser = localStorage.getItem("currentUser")
-      if (!currentUser) {
-        // Rediriger vers la page d'authentification
-        router.push("/auth?redirect=quiz")
-      }
+    if (mounted && !isLoading && !user) {
+      router.push("/auth?redirect=quiz");
     }
-  }, [mounted, router])
+  }, [mounted, isLoading, user, router]);
 
   // Filtrer les questions par catégorie et niveau
   const filteredQuestions = quizData.filter((q) => {
@@ -66,13 +61,9 @@ export default function QuizPage() {
         : "Avancé"
     : "Tous les niveaux"
 
-  useEffect(() => {
-    setMounted(true)
-    const currentUser = localStorage.getItem("currentUser")
-    if (currentUser) {
-      setUser(JSON.parse(currentUser))
-    }
-  }, [])
+    useEffect(() => {
+      setMounted(true);
+    }, []);
 
   useEffect(() => {
     if (currentQuestion >= filteredQuestions.length) {
