@@ -9,16 +9,18 @@ import { Leaderboard } from "@/components/leaderboard"
 import { categories } from "@/data/categories"
 import { Button } from "@/components/ui/button"
 import { useState, useEffect } from "react"
+import { useAuth } from "@/hooks/use-auth"
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const { user } = useAuth()
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
-    const user = localStorage.getItem("currentUser")
-    setIsLoggedIn(!!user)
   }, [])
+
+  // Vérifier si l'utilisateur est connecté en utilisant le hook useAuth
+  const isLoggedIn = !!user
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-green-50 to-white dark:from-gray-900 dark:to-gray-950">
@@ -48,22 +50,23 @@ export default function Home() {
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-16">
-        <div className="lg:col-span-2">
-  <div className="relative w-full h-64 md:h-80 rounded-xl overflow-hidden mb-8 shadow-xl transform hover:scale-[1.01] transition-transform duration-500">
-    <div className="absolute inset-0 bg-black/60 z-10 flex items-center justify-center">
-      <div className="text-center px-6 animate-float">
-        <div className="text-white text-2xl mb-2">"</div>
-        <h2 className="text-white text-2xl md:text-4xl font-bold text-center leading-snug">
-          رَبِّ زِدْنِي عِلْمًا<br />
-          <span className="italic text-lg block mt-2">« Mon Seigneur, augmente-moi en science »</span>
-          <span className="italic text-base block mt-1">(Sourate Ta-Ha, 20:114)</span>
-        </h2>
-        <div className="text-white text-2xl mt-2">"</div>
-      </div>
-    </div>
-    <img src="/savoir.jpg" alt="Mosquée" className="w-full h-full object-cover" />
-  </div>
-</div>
+          <div className="lg:col-span-2">
+            <div className="relative w-full h-64 md:h-80 rounded-xl overflow-hidden mb-8 shadow-xl transform hover:scale-[1.01] transition-transform duration-500">
+              <div className="absolute inset-0 bg-black/60 z-10 flex items-center justify-center">
+                <div className="text-center px-6 animate-float">
+                  <div className="text-white text-2xl mb-2">"</div>
+                  <h2 className="text-white text-2xl md:text-4xl font-bold text-center leading-snug">
+                    رَبِّ زِدْنِي عِلْمًا
+                    <br />
+                    <span className="italic text-lg block mt-2">« Mon Seigneur, augmente-moi en science »</span>
+                    <span className="italic text-base block mt-1">(Sourate Ta-Ha, 20:114)</span>
+                  </h2>
+                  <div className="text-white text-2xl mt-2">"</div>
+                </div>
+              </div>
+              <img src="/savoir.jpg" alt="Mosquée" className="w-full h-full object-cover" />
+            </div>
+          </div>
 
           <div className="lg:col-span-1">
             <Leaderboard />

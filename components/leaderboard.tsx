@@ -16,17 +16,25 @@ interface UserScore {
 
 export function Leaderboard() {
   const [topScores, setTopScores] = useState<UserScore[]>([])
-  const [mounted, setMounted] = useState(false)
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    setMounted(true)
     loadTopScores()
   }, [])
 
-  const loadTopScores = () => {
+  const loadTopScores = async () => {
     try {
-      // Récupérer tous les utilisateurs
-      const users = JSON.parse(localStorage.getItem("users") || "[]")
+      setLoading(true)
+
+      // Récupérer les utilisateurs depuis l'API
+      const response = await fetch("/api/users/scores")
+
+      if (!response.ok) {
+        throw new Error("Erreur lors de la récupération des scores")
+      }
+
+      const data = await response.json()
+      const users = data.users || []
 
       // Extraire tous les scores
       const allScores: UserScore[] = []
@@ -61,13 +69,14 @@ export function Leaderboard() {
     } catch (error) {
       console.error("Erreur lors du chargement des scores:", error)
       setTopScores([])
+    } finally {
+      setLoading(false)
     }
   }
 
-  if (!mounted) return null
-
   // Si pas assez de scores, ajouter des exemples
-  if (topScores.length < 3) {
+  const displayScores = [...topScores]
+  if (displayScores.length < 3) {
     const exampleScores = [
       { userId: "ex1", userName: "Ahmed", score: 95, category: "Coran", level: "Avancé", date: Date.now() },
       {
@@ -82,8 +91,8 @@ export function Leaderboard() {
     ]
 
     // Ajouter uniquement les exemples nécessaires
-    for (let i = topScores.length; i < 3; i++) {
-      topScores.push(exampleScores[i])
+    for (let i = displayScores.length; i < 3; i++) {
+      displayScores.push(exampleScores[i])
     }
   }
 
@@ -109,40 +118,44 @@ export function Leaderboard() {
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="divide-y divide-green-100 dark:divide-green-900">
-          {topScores.map((score, index) => (
-            <div
-              key={index}
-              className={`flex items-center p-4 ${index === 0 ? "bg-yellow-50 dark:bg-yellow-900/20" : ""}`}
-            >
-              <div className="flex-shrink-0 mr-4">
-                <div className="relative">
-                  <Avatar className="h-10 w-10 border-2 border-green-500 dark:border-green-700">
-                    <AvatarImage
-                      src={`https://ui-avatars.com/api/?name=${encodeURIComponent(score.userName)}&background=16a34a&color=fff`}
-                      alt={score.userName}
-                    />
-                    <AvatarFallback className="bg-green-700 text-white">{score.userName.charAt(0)}</AvatarFallback>
-                  </Avatar>
-                  <div
-                    className={`absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 ${getTrophyColor(index)}`}
-                  >
-                    {index + 1}
+        {loading ? (
+          <div className="p-4 text-center text-gray-500">Chargement des scores...</div>
+        ) : (
+          <div className="divide-y divide-green-100 dark:divide-green-900">
+            {displayScores.map((score, index) => (
+              <div
+                key={index}
+                className={`flex items-center p-4 ${index === 0 ? "bg-yellow-50 dark:bg-yellow-900/20" : ""}`}
+              >
+                <div className="flex-shrink-0 mr-4">
+                  <div className="relative">
+                    <Avatar className="h-10 w-10 border-2 border-green-500 dark:border-green-700">
+                      <AvatarImage
+                        src={`https://ui-avatars.com/api/?name=${encodeURIComponent(score.userName)}&background=16a34a&color=fff`}
+                        alt={score.userName}
+                      />
+                      <AvatarFallback className="bg-green-700 text-white">{score.userName.charAt(0)}</AvatarFallback>
+                    </Avatar>
+                    <div
+                      className={`absolute -top-1 -right-1 w-5 h-5 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 ${getTrophyColor(index)}`}
+                    >
+                      {index + 1}
+                    </div>
                   </div>
                 </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{score.userName}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                    {score.category} • {score.level}
+                  </p>
+                </div>
+                <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300">
+                  {score.score}%
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">{score.userName}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {score.category} • {score.level}
-                </p>
-              </div>
-              <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-300">
-                {score.score}%
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </CardContent>
     </Card>
   )

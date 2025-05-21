@@ -1,36 +1,23 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
 import { LogOut, User } from "lucide-react"
+import { useAuth } from "@/hooks/use-auth"
 
 export function UserAvatar() {
-  const [user, setUser] = useState<any>(null)
-  const [mounted, setMounted] = useState(false)
+  const { user, logout } = useAuth()
   const router = useRouter()
 
-  useEffect(() => {
-    setMounted(true)
-    const currentUser = localStorage.getItem("currentUser")
-    if (currentUser) {
-      setUser(JSON.parse(currentUser))
-    }
-  }, [])
-
   const handleLogout = () => {
-    localStorage.removeItem("currentUser")
-    setUser(null)
-    router.push("/")
+    logout()
   }
 
   const handleLogin = () => {
     router.push("/auth")
   }
-
-  if (!mounted) return null
 
   if (!user) {
     return (

@@ -12,13 +12,16 @@ import { UserAvatar } from "@/components/user-avatar"
 import confetti from "canvas-confetti"
 import Link from "next/link"
 import { categories } from "@/data/categories"
+import { useAuth } from "@/hooks/use-auth"
+import { toast } from "@/components/ui/use-toast"
 
 export default function ResultatsPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [showConfetti, setShowConfetti] = useState(false)
-  const [user, setUser] = useState<any>(null)
   const [mounted, setMounted] = useState(false)
+  const [scoreSaved, setScoreSaved] = useState(false)
+  const { user } = useAuth()
 
   const score = Number.parseInt(searchParams.get("score") || "0")
   const total = Number.parseInt(searchParams.get("total") || "10")
@@ -28,11 +31,63 @@ export default function ResultatsPage() {
 
   useEffect(() => {
     setMounted(true)
-    const currentUser = localStorage.getItem("currentUser")
-    if (currentUser) {
-      setUser(JSON.parse(currentUser))
-    }
   }, [])
+
+  // Effet pour sauvegarder le score
+  useEffect(() => {
+    const saveScore = async () => {
+      if (user && !scoreSaved) {
+        try {
+          // Créer un nouvel objet score
+          const newScore = {
+            score: percentage,
+            category: categoryId,
+            level,
+            date: Date.now(),
+          }
+
+          // Récupérer les scores actuels de l'utilisateur
+          const currentScores = user.scores || []
+
+          // Ajouter le nouveau score
+          const updatedScores = [...currentScores, newScore]
+
+          // Envoyer la mise à jour à l'API
+          const response = await fetch(`/api/users/scores`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              userId: user.id,
+              scores: updatedScores,
+            }),
+          })
+
+          if (!response.ok) {
+            throw new Error("Erreur lors de la sauvegarde du score")
+          }
+
+          setScoreSaved(true)
+          toast({
+            title: "Score enregistré",
+            description: "Votre score a été enregistré avec succès",
+          })
+        } catch (error) {
+          console.error("Erreur lors de la sauvegarde du score:", error)
+          toast({
+            title: "Erreur",
+            description: "Impossible d'enregistrer votre score",
+            variant: "destructive",
+          })
+        }
+      }
+    }
+
+    if (user && mounted && !scoreSaved) {
+      saveScore()
+    }
+  }, [user, mounted, scoreSaved, percentage, categoryId, level])
 
   useEffect(() => {
     if (percentage >= 70) {

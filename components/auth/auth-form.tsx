@@ -10,8 +10,8 @@ import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { toast } from "@/components/ui/use-toast"
 import { Loader2 } from "lucide-react"
+import { useAuth } from "@/hooks/use-auth"
 
 const loginSchema = z.object({
   username: z.string().min(2, { message: "Le nom d'utilisateur doit contenir au moins 2 caractères" }),
@@ -29,6 +29,7 @@ type RegisterValues = z.infer<typeof registerSchema>
 export function AuthForm() {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const { login, register } = useAuth()
 
   const loginForm = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
@@ -49,30 +50,10 @@ export function AuthForm() {
   async function onLoginSubmit(data: LoginValues) {
     setIsLoading(true)
     try {
-      // Simuler une authentification
-      const users = JSON.parse(localStorage.getItem("users") || "[]")
-      const user = users.find((u: any) => u.username === data.username && u.password === data.password)
-
-      if (user) {
-        localStorage.setItem("currentUser", JSON.stringify(user))
-        toast({
-          title: "Connexion réussie",
-          description: `Bienvenue, ${user.username} !`,
-        })
+      const success = await login(data.username, data.password)
+      if (success) {
         router.push("/")
-      } else {
-        toast({
-          title: "Erreur de connexion",
-          description: "Nom d'utilisateur ou mot de passe incorrect",
-          variant: "destructive",
-        })
       }
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de la connexion",
-        variant: "destructive",
-      })
     } finally {
       setIsLoading(false)
     }
@@ -81,39 +62,10 @@ export function AuthForm() {
   async function onRegisterSubmit(data: RegisterValues) {
     setIsLoading(true)
     try {
-      // Simuler une inscription
-      const users = JSON.parse(localStorage.getItem("users") || "[]")
-      const existingUser = users.find((u: any) => u.username === data.username)
-
-      if (existingUser) {
-        toast({
-          title: "Erreur d'inscription",
-          description: "Ce nom d'utilisateur est déjà utilisé",
-          variant: "destructive",
-        })
-      } else {
-        const newUser = {
-          id: Date.now().toString(),
-          username: data.username,
-          password: data.password,
-          scores: [],
-        }
-        users.push(newUser)
-        localStorage.setItem("users", JSON.stringify(users))
-        localStorage.setItem("currentUser", JSON.stringify(newUser))
-
-        toast({
-          title: "Inscription réussie",
-          description: `Bienvenue, ${data.username} !`,
-        })
+      const success = await register(data.username, data.password)
+      if (success) {
         router.push("/")
       }
-    } catch (error) {
-      toast({
-        title: "Erreur",
-        description: "Une erreur est survenue lors de l'inscription",
-        variant: "destructive",
-      })
     } finally {
       setIsLoading(false)
     }
