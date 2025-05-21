@@ -24,7 +24,7 @@ export const getUsers = (): User[] => {
     const data = fs.readFileSync(usersFilePath, "utf8")
     return JSON.parse(data)
   } catch (error) {
-    console.error("Erreur lors de la lecture des utilisateurs:", error)
+    // console.error("Erreur lors de la lecture des utilisateurs:", error)
     return []
   }
 }
@@ -34,7 +34,7 @@ export const saveUsers = (users: User[]): void => {
   try {
     fs.writeFileSync(usersFilePath, JSON.stringify(users, null, 2), "utf8")
   } catch (error) {
-    console.error("Erreur lors de la sauvegarde des utilisateurs:", error)
+    // console.error("Erreur lors de la sauvegarde des utilisateurs:", error)
   }
 }
 

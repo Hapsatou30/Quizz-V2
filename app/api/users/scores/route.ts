@@ -20,7 +20,7 @@ export async function PUT(request: NextRequest) {
 
     return NextResponse.json({ user: userWithoutPassword })
   } catch (error) {
-    console.error("Erreur de mise à jour des scores:", error)
+    // console.error("Erreur de mise à jour des scores:", error)
     return NextResponse.json({ error: "Une erreur est survenue lors de la mise à jour des scores" }, { status: 500 })
   }
 }
@@ -34,7 +34,7 @@ export async function GET() {
 
     return NextResponse.json({ users: usersWithoutPasswords })
   } catch (error) {
-    console.error("Erreur de récupération des utilisateurs:", error)
+    // console.error("Erreur de récupération des utilisateurs:", error)
     return NextResponse.json(
       { error: "Une erreur est survenue lors de la récupération des utilisateurs" },
       { status: 500 },

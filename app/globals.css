@@ -124,3 +124,11 @@ body {
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+/* globals.css */
+.toast {
+  @apply bg-white text-black rounded-lg shadow-lg p-4;
+}
+
+.toast-destructive {
+  @apply bg-red-500 text-white;
+}

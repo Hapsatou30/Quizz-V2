@@ -125,7 +125,7 @@ export default function QuizPage() {
             localStorage.setItem("currentUser", JSON.stringify(user))
           }
         } catch (error) {
-          console.error("Erreur lors de la sauvegarde du score:", error)
+          // console.error("Erreur lors de la sauvegarde du score:", error)
         }
       }
 
@@ -178,10 +178,10 @@ export default function QuizPage() {
     // Vérifier si la réponse est correcte
     const isCorrect = normalizedSelected === normalizedCorrect
 
-    console.log("Réponse sélectionnée:", selectedAnswer)
-    console.log("Réponse correcte:", correctAnswer)
-    console.log("Est correcte:", isCorrect)
-    console.log("État isAnswered:", true)
+    // console.log("Réponse sélectionnée:", selectedAnswer)
+    // console.log("Réponse correcte:", correctAnswer)
+    // console.log("Est correcte:", isCorrect)
+    // console.log("État isAnswered:", true)
 
     // Incrémenter le score si la réponse est correcte
     if (isCorrect) {

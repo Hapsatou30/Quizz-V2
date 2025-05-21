@@ -12,6 +12,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Loader2 } from "lucide-react"
 import { useAuth } from "@/hooks/use-auth"
+import { toast } from "@/components/ui/use-toast" // Import de la fonction toast
 
 const loginSchema = z.object({
   username: z.string().min(2, { message: "Le nom d'utilisateur doit contenir au moins 2 caractères" }),
@@ -52,8 +53,25 @@ export function AuthForm() {
     try {
       const success = await login(data.username, data.password)
       if (success) {
+        toast({
+          title: "Connexion réussie",
+          description: "Vous êtes maintenant connecté.",
+          variant: "default",
+        })
         router.push("/")
+      } else {
+        toast({
+          title: "Erreur de connexion",
+          description: "Nom d'utilisateur ou mot de passe incorrect.",
+          variant: "destructive",
+        })
       }
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de la connexion.",
+        variant: "destructive",
+      })
     } finally {
       setIsLoading(false)
     }
@@ -64,8 +82,25 @@ export function AuthForm() {
     try {
       const success = await register(data.username, data.password)
       if (success) {
+        toast({
+          title: "Inscription réussie",
+          description: "Votre compte a été créé avec succès.",
+          variant: "default",
+        })
         router.push("/")
+      } else {
+        toast({
+          title: "Erreur d'inscription",
+          description: "Impossible de créer un compte. Veuillez réessayer.",
+          variant: "destructive",
+        })
       }
+    } catch (error: any) {
+      toast({
+        title: "Erreur",
+        description: "Une erreur est survenue lors de l'inscription.",
+        variant: "destructive",
+      })
     } finally {
       setIsLoading(false)
     }

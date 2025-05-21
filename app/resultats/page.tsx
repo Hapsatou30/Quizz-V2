@@ -74,7 +74,7 @@ export default function ResultatsPage() {
             description: "Votre score a été enregistré avec succès",
           })
         } catch (error) {
-          console.error("Erreur lors de la sauvegarde du score:", error)
+          // console.error("Erreur lors de la sauvegarde du score:", error)
           toast({
             title: "Erreur",
             description: "Impossible d'enregistrer votre score",

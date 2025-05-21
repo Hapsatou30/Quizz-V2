@@ -29,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ user: userWithoutPassword }, { status: 201 })
   } catch (error) {
-    console.error("Erreur d'inscription:", error)
+    // console.error("Erreur d'inscription:", error)
     return NextResponse.json({ error: "Une erreur est survenue lors de l'inscription" }, { status: 500 })
   }
 }

@@ -34,7 +34,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       try {
         setUser(JSON.parse(storedUser))
       } catch (error) {
-        console.error("Erreur lors du chargement de l'utilisateur:", error)
+        // console.error("Erreur lors du chargement de l'utilisateur:", error)
         sessionStorage.removeItem("currentUser")
       }
     }
@@ -71,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       return true
     } catch (error) {
-      console.error("Erreur de connexion:", error)
+      // console.error("Erreur de connexion:", error)
       toast({
         title: "Erreur",
         description: "Une erreur est survenue lors de la connexion",
@@ -114,7 +114,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       return true
     } catch (error) {
-      console.error("Erreur d'inscription:", error)
+      // console.error("Erreur d'inscription:", error)
       toast({
         title: "Erreur",
         description: "Une erreur est survenue lors de l'inscription",

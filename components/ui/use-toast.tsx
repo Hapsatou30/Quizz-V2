@@ -2,14 +2,16 @@
 
 // Inspired by react-hot-toast library
 import * as React from "react"
+import * as ToastPrimitive from "@radix-ui/react-toast"
 
 import type {
   ToastActionElement,
   ToastProps,
 } from "@/components/ui/toast"
-
-const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 1000000
+export const ToastProvider = ToastPrimitive.Provider;
+export const ToastViewport = ToastPrimitive.Viewport; 
+const TOAST_LIMIT = 3
+const TOAST_REMOVE_DELAY = 3000
 
 type ToasterToast = ToastProps & {
   id: string

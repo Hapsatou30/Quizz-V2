@@ -4,14 +4,15 @@ import "@/app/globals.css"
 import { Inter } from "next/font/google"
 import Script from "next/script"
 import { AuthProvider } from "@/hooks/use-auth"
-
+import * as Toast from "@radix-ui/react-toast"
+import { ToastProvider, ToastViewport } from "@/components/ui/use-toast"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Quiz Islamique",
   description: "Testez vos connaissances sur l'Islam avec notre quiz interactif",
-    generator: 'v0.dev'
+  generator: "v0.dev",
 }
 
 export default function RootLayout({
@@ -24,12 +25,8 @@ export default function RootLayout({
       <head>
         <Script id="theme-script" strategy="beforeInteractive">
           {`
-            // Vérifier si un thème est stocké dans localStorage
             const savedTheme = localStorage.getItem('theme');
-            // Vérifier si l'utilisateur préfère le thème sombre au niveau du système
             const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            
-            // Appliquer le thème sombre si sauvegardé ou préféré par le système
             if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
               document.documentElement.classList.add('dark');
             } else {
@@ -39,11 +36,13 @@ export default function RootLayout({
         </Script>
       </head>
       <body className={inter.className}>
-      <AuthProvider>
-        {children}
+        <AuthProvider>
+        <ToastProvider>
+          {children}
+          <ToastViewport className="fixed bottom-4 right-4 z-50 w-[320px] max-w-full" />
+        </ToastProvider>
         </AuthProvider>
-        </body>
+      </body>
     </html>
   )
 }
-

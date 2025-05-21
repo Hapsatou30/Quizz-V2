@@ -12,6 +12,12 @@ export async function POST(request: NextRequest) {
     const user = findUser(username, password)
 
     if (!user) {
+      // Vérifier si l'utilisateur existe uniquement par le nom d'utilisateur
+      const userExists = findUser(username, "");
+      if (!userExists) {
+        return NextResponse.json({ error: "Aucun compte trouvé avec ce nom d'utilisateur. Veuillez vous inscrire." }, { status: 404 })
+      }
+
       return NextResponse.json({ error: "Nom d'utilisateur ou mot de passe incorrect" }, { status: 401 })
     }
 
@@ -20,7 +26,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ user: userWithoutPassword })
   } catch (error) {
-    console.error("Erreur de connexion:", error)
+    // console.error("Erreur de connexion:", error)
     return NextResponse.json({ error: "Une erreur est survenue lors de la connexion" }, { status: 500 })
   }
 }

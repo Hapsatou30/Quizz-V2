@@ -67,7 +67,7 @@ export function Leaderboard() {
 
       setTopScores(top3)
     } catch (error) {
-      console.error("Erreur lors du chargement des scores:", error)
+      // console.error("Erreur lors du chargement des scores:", error)
       setTopScores([])
     } finally {
       setLoading(false)
