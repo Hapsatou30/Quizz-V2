@@ -1,3 +1,15 @@
 [
- supprime
+  {
+    "id": "1747914299001",
+    "username": "poupée",
+    "password": "motdepasse123",
+    "scores": [
+      {
+        "score": 100,
+        "category": "coran",
+        "level": "debutant",
+        "date": 1747914351209
+      }
+    ]
+  }
 ]
